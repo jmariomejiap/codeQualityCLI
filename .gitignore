@@ -1,0 +1,14 @@
+.DS_Store
+node_modules/
+npm-debug.log
+.idea/
+dump.rdb
+public/*
+dist
+coverage/
+.nyc_output/
+logs/*
+test_logs/
+*.map
+*.js
+generatedSchema
