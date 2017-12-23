@@ -4,7 +4,8 @@
   "description": "Code coverage reporter - cli",
   "main": "src/index.js",
   "scripts": {
-    "start": "npm build && node ./src/index.js",
+    "start": "node ./src/index.js",
+    "start:dev": "npm build && node ./src/index.js",
     "test": "npm build && npm run test:run",
     "test:run": "cross-env NODE_ENV=test node node_modules/.bin/ava --serial",
     "build": "tsc",
