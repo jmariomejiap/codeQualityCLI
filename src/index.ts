@@ -1,55 +1,23 @@
-import * as fs from 'fs';
-import * as path from 'path';
-import * as getRepoInfo from 'git-repo-info';
+import gitReader from '../src/util/gitInfoReader';
+import createProject from '../src/createProject';
+import sendCommitAPI from '../src/sendCommitAPI';
+import fileReader from '../src/util/fileReader';
 
 
-const pathToFile: string = './coverageData/coverage-summary.json'
+createProject('CLIProject3');
 
-const fileReader = (file: string) => {
-  return new Promise((resolve, reject) => {
-    return fs.readFile(path.resolve(file), (err, data) => {
-      if (err) {
-        reject(err)
-      }
-      resolve(data);
-    });
-  })
-};
+const gitInfo = gitReader();
+const commitJsonFile = fileReader('./coverage/coverage-summary.json');
+const projectIdJson = fileReader('./XXcctoken.json');
 
-
-const gitReader = () => {
-  const info = getRepoInfo();
-
-  const gitInfo = {
-    gitInfo: {
-      branch: info.branch,
-      sha: info.sha,
-      abbreviatedSha: info.abbreviatedSha,
-      author: info.author,
-    }
-  };
-
-  return gitInfo;   
-};
-
-
-const fetchJsonCoverage = async () => {
-  let result;
-  try {
-    result = await fileReader(pathToFile);
-  } catch (error) {
-    console.error('catching error = ', error);
-  }
-
-  return result;
-};
+sendCommitAPI(gitInfo, commitJsonFile, projectIdJson);
 
 
 
 
 
+/*
 const msg: string = 'Code Quality CLI';
 console.log(msg);
+*/
 
-console.log('******');
-console.log(fetchJsonCoverage());
