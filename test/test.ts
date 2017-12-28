@@ -26,14 +26,14 @@ ava.before(async () => {
 
   // connect to db
   database = mongoose.connect('mongodb://localhost:27017/code-quality', {
-    useMongoClient: true
+    useMongoClient: true,
   });
-
 });
+
 
 ava.after('after', async (t) => {
   database.close();
-})
+});
 
 
 ava.serial('true should be true', (t) => {
@@ -41,7 +41,7 @@ ava.serial('true should be true', (t) => {
 });
 
 
-ava('should retrive git information', async (t) => {
+ava('should retrieve git information', async (t) => {
   const git = gitReader();
 
   // t.is() values depend on local user
@@ -66,7 +66,7 @@ ava('should return a file if path is right', async (t) => {
 
 ava('createProject should return error if project already exist', async (t) => {
   const newProject = await createProject('dummyProject1');
-  
+
   t.is(newProject.result, 'project_already_exist');
 });
 
@@ -79,8 +79,9 @@ ava('should fail if name given to a project is invalid', async (t) => {
   t.is(newProject.error.error, 'invalid_valueRegex');
 });
 
+
 ava('createProject  project ', async (t) => {
-  const newProjectName = 'avaProjectTest'
+  const newProjectName = 'avaProjectTest';
   const newProject = await createProject(newProjectName);
 
   const projects = await Project.find({});
@@ -94,3 +95,5 @@ ava('createProject  project ', async (t) => {
 
   await Project.remove({ name: newProjectName });
 });
+
+

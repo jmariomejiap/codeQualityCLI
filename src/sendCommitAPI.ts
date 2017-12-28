@@ -1,12 +1,27 @@
 import * as rp from 'request-promise';
+import gitReader from '../src/util/gitInfoReader';
+import fileReader from '../src/util/fileReader';
 
 
-
-const sendCommitToApi = async (gitData, jsonFile, projectIdFile) => {
+const sendCommitToApi = async () => {
+  const gitData = gitReader();
   const { branch, abbreviatedSha, author } = gitData.gitInfo;
 
-  const resolveProject = await projectIdFile;
-  const cqtoken = JSON.parse(resolveProject);
+  const projectCLI = await fileReader('./codeQualityCLI.json');
+  const projectData = JSON.parse(projectCLI);
+
+  const commitJson = await fileReader('./coverage/coverage-summary.json');
+
+
+  if (!projectCLI) {
+    console.error('you must have an active project');
+    return { error: 'projectCLI_not_found' };
+  }
+
+  if (!commitJson) {
+    console.error('code coverage must be available');
+    return { error: 'coverage-summary.json_not_found' };
+  }
 
   const options = {
     method: 'POST',
@@ -14,9 +29,9 @@ const sendCommitToApi = async (gitData, jsonFile, projectIdFile) => {
     body: {
       branch,
       author,
-      commitJson: await jsonFile,
+      commitJson: JSON.parse(commitJson),
       commitHash: abbreviatedSha,
-      projectId: cqtoken.projectId,
+      projectId: projectData.projectId,
     },
     json: true,
   };
@@ -25,10 +40,13 @@ const sendCommitToApi = async (gitData, jsonFile, projectIdFile) => {
     .then((parsedBody) => {
       // POST succeeded...
       console.log('then.... ,', parsedBody);
+      return { result: 'ok' };
     })
     .catch((err) => {
       // POST failed...
-      console.log('catch.... error post.... long {} ');
+      console.log('catch.... error post.... long {} ', Object.keys(err));
+      console.info('error = ', err.error); // internal_error
+      return { result: 'error' };
     });
 };
 
