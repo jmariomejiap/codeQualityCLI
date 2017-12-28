@@ -31,7 +31,8 @@
     "git-repo-info": "1.4.1",
     "inquirer": "4.0.1",
     "request": "2.83.0",
-    "request-promise": "4.2.2"
+    "request-promise": "4.2.2",
+    "mongoose": "4.13.8"
   },
   "devDependencies": {
     "@types/node": "8.0.26",

@@ -37,17 +37,18 @@ const createProject = async (name) => {
 
     const data = JSON.stringify(body);
 
-    fileWriter('projectCLI.json', data);
+    fileWriter('codeQualityCLI.json', data);
     console.log(`project ${name} succesfully created`);
     return { result: 'saved' };
   }
 
-  if (newProject.error === 'project_already_exist') {
+  // console.log('inside createProject .... exiisting name ', newProject);
+
+  if (newProject.error.error === 'project_already_exist') {
     console.log(`project ${name} already exists`);
     return { result: 'project_already_exist' };
   }
 
-  console.log(' internal error creating newProject = ', newProject);
   return newProject;
 };
 

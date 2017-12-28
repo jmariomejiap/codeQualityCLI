@@ -14,7 +14,7 @@ const projectIdJson = fileReader('./XXcctoken.json');
 
 // sendCommitAPI(gitInfo, commitJsonFile, projectIdJson);
 
-const question = [
+const createQuestion = [
   {
     type: 'input',
     name: 'projectName',
@@ -33,7 +33,7 @@ program
   .alias('c')
   .description('Command to create a new project')
   .action(() => {
-    prompt(question)
+    prompt(createQuestion)
       .then((answer) => {
         const newName = answer.projectName;
         createProject(newName);
