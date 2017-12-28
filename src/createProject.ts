@@ -25,6 +25,7 @@ const sendProjectApi = async (projectName: string) => {
 
 
 const createProject = async (name) => {
+
   const newProject = await sendProjectApi(name);
 
   if (newProject.result === 'ok') {
@@ -37,10 +38,16 @@ const createProject = async (name) => {
     const data = JSON.stringify(body);
 
     fileWriter('projectCLI.json', data);
+    console.log(`project ${name} succesfully created`);
     return { result: 'saved' };
   }
 
-  console.log(`project ${name} already exists`);
+  if (newProject.error === 'project_already_exist') {
+    console.log(`project ${name} already exists`);
+    return { result: 'project_already_exist' };
+  }
+
+  console.log(' internal error creating newProject = ', newProject);
   return newProject;
 };
 
