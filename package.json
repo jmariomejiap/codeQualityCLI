@@ -12,9 +12,7 @@
     "watch-ts": "tsc -w",
     "prepublish": "npm build",
     "cover": "nyc --reporter=html --reporter=text --reporter=json-summary npm run test",
-    "lint": "tslint -c tslint.json -p tsconfig.json",
-    "createproject": "npm run build && node ./src/index.js create",
-    "submitcoverage": "npm run build && node ./src/index.js submitcoverage"
+    "lint": "tslint -c tslint.json -p tsconfig.json"
   },
   "repository": {
     "type": "git",

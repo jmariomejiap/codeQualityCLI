@@ -1,24 +1,34 @@
 import babelPolyfill from 'babel-polyfill'; // tslint:disable-line no-unused-variable
 import ava from 'ava';
+import sendCommitToApi from '../src/index';
 import * as mongoose from 'mongoose';
-import gitReader from '../src/util/gitInfoReader';
+import gitInfoReader from '../src/util/gitInfoReader';
 import fileReader from '../src/util/fileReader';
-import createProject from '../src/createProject';
 
+// schemas to delete documents created during testing
 const Schema = mongoose.Schema;
 
-const project = new Schema({
-  name: { type: String, require: true },
-  token: { type: String, require: true },
-  dateCreated: { type: Date, require: true },
-  dateUpdated: { type: Date, require: true },
-  isActive: { type: Boolean, require: true },
+const projectCommits = new Schema({
+  projectId: { type: String, require: true },
+  branch: { type: String, require: true },
+  commitDate: { type: Date, require: true },
+  testCoveragePorcentage: { type: Object, require: true },
+  author: { type: String, require: true },
+  gitCommitHash: { type: String, require: true },
 });
 
-const Project = mongoose.model('Project', project);
+const ProjectCommits = mongoose.model('ProjectCommits', projectCommits); // tslint:disable-line
 
+const branches = new Schema({
+  projectId: { type: String, require: true },
+  name: { type: String, require: true },
+});
+
+const Branches = mongoose.model('Branches', branches); // tslint:disable-line
+
+
+// connection to database mongoose;
 let database;
-
 
 
 ava.before(async () => {
@@ -42,10 +52,10 @@ ava.serial('true should be true', (t) => {
 
 
 ava('should retrieve git information', async (t) => {
-  const git = gitReader();
+  const git = gitInfoReader();
 
   // t.is() values depend on local user
-  t.truthy(git.gitInfo.branch);
+  t.truthy(git.branch);
 });
 
 
@@ -64,36 +74,35 @@ ava('should return a file if path is right', async (t) => {
 });
 
 
-ava('createProject should return error if project already exist', async (t) => {
-  const newProject = await createProject('dummyProject1');
+ava('should fail if commit sent has bad token', async (t) => {
+  process.env.TOKEN = '824ceaeXXXX0-e80c-11e7-affc-43f976dbdae1';
+  process.env.GITAUTHOR = 'dummyUserTest testemail@email.com';
+  process.env.GITBRANCH =  'dummyTestBranch';
+  const res = await sendCommitToApi();
 
-  t.is(newProject.result, 'project_already_exist');
+  t.is(res.result, 'error');
+  delete process.env.TOKEN;
+  delete process.env.GITAUTHOR;
+  delete process.env.GITBRANCH;
+
+  await ProjectCommits.remove({ author: 'dummyUserTest testemail@email.com' });
+  await Branches.remove({ name: 'dummyTestBranch' });
 });
 
 
-ava('should fail if name given to a project is invalid', async (t) => {
-  const newProject = await createProject('334badName');
+ava('should succesfully send a commit', async (t) => {
+  process.env.TOKEN = '824ceae0-e80c-11e7-affc-43f976dbdae1';
+  process.env.GITAUTHOR = 'dummyUserTest testemail@email.com';
+  process.env.GITBRANCH =  'dummyTestBranch';
+  const res = await sendCommitToApi();
 
-  t.is(newProject.statusCode, 404);
-  t.is(newProject.error.result, 'error');
-  t.is(newProject.error.error, 'invalid_valueRegex');
-});
+  t.is(res.result, 'ok');
+  delete process.env.TOKEN;
+  delete process.env.GITAUTHOR;
+  delete process.env.GITBRANCH;
 
-
-ava('createProject  project ', async (t) => {
-  const newProjectName = 'avaProjectTest';
-  const newProject = await createProject(newProjectName);
-
-  const projects = await Project.find({});
-
-  const verifyNewProject = projects.filter((p) => {
-    return p.name === 'avaProjectTest';
-  });
-
-  t.is(verifyNewProject[0].name, newProjectName);
-  t.is(newProject.result, 'saved');
-
-  await Project.remove({ name: newProjectName });
+  await ProjectCommits.remove({ author: 'dummyUserTest testemail@email.com' });
+  await Branches.remove({ name: 'dummyTestBranch' });
 });
 
 
