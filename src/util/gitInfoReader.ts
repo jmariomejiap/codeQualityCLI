@@ -1,17 +1,21 @@
 import * as getRepoInfo from 'git-repo-info';
-import { GitInfo as G } from './indexTypes';
+import { GitInfo } from './indexTypes';
 
+export interface GitReaderFun {
+  (): GitInfo;
+}
 
-const gitReader = () => {
+const gitReader: GitReaderFun = () => {
   const info = getRepoInfo();
 
-  const gitInfo: G = {
+  const gitInfo: GitInfo = {
     branch: info.branch,
     sha: info.sha,
     abbreviatedSha: info.abbreviatedSha,
     author: info.author,
   };
-
+  console.log(gitInfo);
+  console.log(info);
   return gitInfo;
 };
 
