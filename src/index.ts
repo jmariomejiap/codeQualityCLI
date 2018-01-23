@@ -33,7 +33,7 @@ const index = async (): Promise<T.Result> => {
     },
     json: true,
   };
-  
+
   let result: T.Result;
   try {
     result = await rp(payload);

@@ -3,8 +3,6 @@ import ava from 'ava';
 import index from '../src/index';
 import gitInfoReader from '../src/util/gitInfoReader';
 import fileReader from '../src/util/fileReader';
-import { error } from 'util';
-
 
 
 ava.serial('true should be true', (t) => {
