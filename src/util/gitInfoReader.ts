@@ -3,7 +3,7 @@ const gitReader = async (): Promise<any> => {
     require('simple-git')()
       .log((err, log) => {
         const { hash, message, author_name } = log.latest;
-
+        console.log('log = ', log.latest);
         const regexFindBranch = /\>([^,]+)/g;
         const regexCleanUp = /[a-z]+\d/g;
 
