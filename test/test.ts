@@ -1,28 +1,19 @@
 import babelPolyfill from 'babel-polyfill'; // tslint:disable-line no-unused-variable
 import ava from 'ava';
-// import index from '../src/index';
+import index from '../src/index';
 // import gitInfoReader from '../src/util/gitInfoReader';
 // import fileReader from '../src/util/fileReader';
 
-/*
-ava.before(async () => {
-  mongoose.Promise = global.Promise;
 
-  // connect to db
-  database = mongoose.connect('mongodb://localhost:27017/code-quality', {
-    useMongoClient: true,
-  });
-});
-
-
-ava.after('after', async (t) => {
-  database.close();
-});
-*/
 
 ava.serial('true should be true', (t) => {
+  index()
   t.is(true, true);
 });
+
+
+
+
 
 /*
 
