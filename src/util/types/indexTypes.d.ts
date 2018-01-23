@@ -1,5 +1,5 @@
 
-export namespace IndexTypesDefinition {
+export namespace index {
   
   export interface Body {
     branch: string;
@@ -20,7 +20,6 @@ export namespace IndexTypesDefinition {
     result: string;
     error?: string;
   }
-
 }
 
 export interface GitInfo {

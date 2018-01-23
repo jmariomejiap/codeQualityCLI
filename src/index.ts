@@ -1,13 +1,13 @@
 import * as rp from 'request-promise';
 import gitInfoReader from '../src/util/gitInfoReader';
 import fileReader from '../src/util/fileReader';
-import { IndexTypesDefinition as T } from './util/indexTypes';
+import { index as T } from './util/types/indexTypes';
 
 
 const index = async (): Promise<T.Result> => {
-  const uri: string = process.env.URI || 'http://localhost:8000/api/v1/commit';
-  const token: string  = process.env.TOKEN;
-  const location: string = process.env.LOCATION || './coverage/coverage-summary.json';
+  const uri: string = process.env.CODE_QUALITY_SERVER_URI || 'http://localhost:8000/api/v1/commit';
+  const token: string  = process.env.CODE_QUALITY_TOKEN;
+  const location: string = process.env.CQ_JSON_LOCATION || './coverage/coverage-summary.json';
 
   const gitData = await gitInfoReader();
   const commitHash: string = gitData.sha;
@@ -17,8 +17,8 @@ const index = async (): Promise<T.Result> => {
 
   const commitJson: string = await fileReader(location);
 
-  if (!token) {
-    return { result: 'error', error: 'CLI_TOKEN is missing' };
+  if (!token || !commitJson) {
+    return { result: 'error', error: 'CLI is missing needed arguments' };
   }
 
   const payload: T.Options = {

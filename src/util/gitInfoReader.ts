@@ -1,3 +1,5 @@
+import { GitInfo } from '../util/types/indexTypes';
+
 const gitReader = async (): Promise<any> => {
   return new Promise((resolve) => {
     require('simple-git')()
@@ -6,7 +8,7 @@ const gitReader = async (): Promise<any> => {
 
         const branch = message.slice(message.indexOf('origin/') + 7, message.length - 1);
 
-        const gitInfo = {
+        const gitInfo: GitInfo = {
           branch,
           sha: hash,
           author: author_name,
