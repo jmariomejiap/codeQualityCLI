@@ -38,7 +38,7 @@ ava('should fail if No token assigned ', async (t) => {
   const res = await index();
 
   t.is(res.result, 'error');
-  t.is(res.error, 'CLI_TOKEN is missing')
+  t.is(res.error, 'CLI_TOKEN is missing');
 });
 
 
