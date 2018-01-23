@@ -4,17 +4,11 @@ const gitReader = async (): Promise<any> => {
       .log((err, log) => {
         const { hash, message, author_name } = log.latest;
         console.log('log = ', log.latest);
-        // const regexFindBranch = /(?<=origin\/).[a-z, 0-9]+/g;
         
-        let branch : 'hardCoded';
-        try {
-          // branch = message.match(regexFindBranch)[0];
-        } catch (error) {
-          console.error('internal_error');
-        }
+        const branch = message.slice(message.indexOf('origin/') + 7, message.length - 1);
 
-        console.log('sliced = ', branch);
-
+        console.log('branch =', branch)
+      
         const gitInfo = {
           branch,
           sha: hash,
