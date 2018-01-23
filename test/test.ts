@@ -7,7 +7,7 @@ import index from '../src/index';
 
 
 ava.serial('true should be true', (t) => {
-  index()
+  index();
   t.is(true, true);
 });
 
