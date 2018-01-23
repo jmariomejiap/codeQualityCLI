@@ -18,18 +18,14 @@ export namespace IndexTypesDefinition {
 
   export interface Result {
     result: string;
-    error?: ObjectOfStrings
+    error?: string;
   }
 
-  export interface ObjectOfStrings {
-    [key: string]: string;
-  }
 }
 
 export interface GitInfo {
   branch: string;
   sha: string;
-  abbreviatedSha: string;
   author: string;
 }
 

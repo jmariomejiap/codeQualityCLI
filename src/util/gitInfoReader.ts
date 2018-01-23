@@ -1,18 +1,21 @@
-import * as getRepoInfo from 'git-repo-info';
-import { GitInfo as G } from './indexTypes';
+import { GitInfo } from './indexTypes';
 
+const gitReader = async (): Promise<any> => {
+  return new Promise((resolve) => {
+    require('simple-git')()
+      .log((err, log) => {       
+        const { hash, message, author_name } = log.latest;
+        const sliceBranch = message.slice(message.indexOf('>') + 2, message.indexOf(','));
 
-const gitReader = () => {
-  const info = getRepoInfo();
+        const gitInfo = {
+          branch: sliceBranch,
+          sha: hash,
+          author: author_name,
+        };
+        return resolve(gitInfo);
+      })
 
-  const gitInfo: G = {
-    branch: info.branch,
-    sha: info.sha,
-    abbreviatedSha: info.abbreviatedSha,
-    author: info.author,
-  };
-
-  return gitInfo;
+  }) 
 };
 
 export default gitReader;
