@@ -3,7 +3,7 @@ import gitInfoReader from '../src/util/gitInfoReader';
 import fileReader from '../src/util/fileReader';
 import { IndexTypesDefinition as T } from './util/indexTypes';
 
-const sendCommitToApi = async () => {
+const index = async () => {
   const uri: string = process.env.URI || 'http://localhost:8000/api/v1/commit';
   const token: string  = process.env.TOKEN;
   const location: string = process.env.LOCATION || './coverage/coverage-summary.json';
@@ -38,6 +38,6 @@ const sendCommitToApi = async () => {
   return { result: result.result };
 };
 
-sendCommitToApi();
+index();
 
-export default sendCommitToApi;
+export default index;
