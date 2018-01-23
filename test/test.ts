@@ -6,7 +6,7 @@ import fileReader from '../src/util/fileReader';
 
 
 ava.serial('true should be true', (t) => {
-  index();
+  // index();
   t.is(true, true);
 });
 
