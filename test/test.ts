@@ -1,6 +1,6 @@
 import babelPolyfill from 'babel-polyfill'; // tslint:disable-line no-unused-variable
 import ava from 'ava';
-import sendCommitToApi from '../src/index';
+import cli from '../src/index';
 import * as mongoose from 'mongoose';
 import gitInfoReader from '../src/util/gitInfoReader';
 import fileReader from '../src/util/fileReader';
@@ -78,7 +78,7 @@ ava('should fail if commit sent has bad token', async (t) => {
   process.env.TOKEN = '824ceaeXXXX0-e80c-11e7-affc-43f976dbdae1';
   process.env.GITAUTHOR = 'dummyUserTest testemail@email.com';
   process.env.GITBRANCH =  'dummyTestBranch';
-  const res = await sendCommitToApi();
+  const res = await cli();
 
   t.is(res.result, 'error');
   delete process.env.TOKEN;
@@ -94,7 +94,7 @@ ava('should succesfully send a commit', async (t) => {
   process.env.TOKEN = '824ceae0-e80c-11e7-affc-43f976dbdae1';
   process.env.GITAUTHOR = 'dummyUserTest testemail@email.com';
   process.env.GITBRANCH =  'dummyTestBranch';
-  const res = await sendCommitToApi();
+  const res = await cli();
 
   t.is(res.result, 'ok');
   delete process.env.TOKEN;
