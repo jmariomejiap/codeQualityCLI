@@ -22,23 +22,24 @@ export namespace index {
   }
 }
 
-export interface GitInfo {
-  branch: string;
+export interface Log {
   sha: string;
   author: string;
 }
 
-export interface takeStringReturnStringFunc {
+
+export interface FuncStringToPromiseString {
   (str: string): Promise<string>;
 }
 
 export interface EnvVariables {
   serverUrl: string;
   token: string;
+  coverageJson: string;
 }
 
 export interface GetEnvVariblesFunc {
-  (): EnvVariables;
+  (): Promise<EnvVariables>;
 }
 
 

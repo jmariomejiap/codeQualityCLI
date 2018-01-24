@@ -1,35 +1,44 @@
 import * as rp from 'request-promise';
 import gitInfoReader from '../src/util/gitInfoReader';
-import fileReader from '../src/util/fileReader';
-import { index as T } from './util/types/indexTypes';
+import envVarioablesValidator from './util/envVarioablesValidator';
+import { index as T, EnvVariables } from './types/indexTypes';
 
 
 const index = async (): Promise<T.Result> => {
-
   let envVars: EnvVariables;
   try {
-    envVars = getEnvVariblesFunc();
+    envVars = await envVarioablesValidator();
   } catch (error) {
-    console.log(error.message);
+    console.log(error); // tslint:disable-line
+    return;
   }
-  const commitJson: string = await fileReader(location);
 
-  if (!token || !commitJson) {
-    return { result: 'error', error: 'CLI is missing needed arguments' };
+
+  let gitData;
+  try {
+    gitData = await Promise.all(gitInfoReader());
+  } catch (error) {
+    console.log(error); // tslint:disable-line
   }
+
+
+  const { sha, author } = gitData[0];
+  const branch = gitData[1];
+
 
   const payload: T.Options = {
-    uri,
+    uri: envVars.serverUrl,
     method: 'POST',
     body: <T.Body> {
       branch,
       author,
-      commitHash,
-      token,
-      commitJson: JSON.parse(commitJson),
+      commitHash: sha,
+      token: envVars.token,
+      commitJson: JSON.parse(envVars.coverageJson),
     },
     json: true,
   };
+
 
   let result: T.Result;
   try {
@@ -43,7 +52,7 @@ const index = async (): Promise<T.Result> => {
 
 };
 
-index();
+
 
 
 export default index;

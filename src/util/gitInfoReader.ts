@@ -1,23 +1,38 @@
-import { GitInfo, takeStringReturnStringFunc } from '../util/types/indexTypes';
-
+import { Log } from '../types/indexTypes';
 const simpleGit = require('simple-git')();
-const gitReader: takeStringReturnStringFunc = (stringValue) => {
-  return new Promise((resolve) => {
+
+
+const gitReader = () => {
+  const log = new Promise((resolve) => {
     simpleGit
       .log((err, log) => {
-        // simpleGit.branch...
-        const { hash, message, author_name } = log.latest;
+        if (err) {
+          throw new Error('Error getting Git Logs');
+        }
 
-        const branch = message.slice(message.indexOf('origin/') + 7, message.length - 1);
+        const { hash, author_name } = log.latest;
 
-        const gitInfo: GitInfo = {
-          branch,
+        const gitInfo: Log = {
           sha: hash,
           author: author_name,
         };
+
         return resolve(gitInfo);
       });
   });
+
+  const branch = new Promise((resolve) => {
+    simpleGit
+      .branch((err, branchData) => {
+        if (err) {
+          throw new Error('Error getting Git Branch information');
+        }
+        const branch: string = branchData.current;
+        return resolve(branch);
+      });
+  });
+
+  return [log, branch];
 };
 
 export default gitReader;

@@ -1,9 +1,10 @@
 import * as fs from 'fs';
 import * as path from 'path';
+import { FuncStringToPromiseString } from '../types/indexTypes';
 
-const readPromise = (file: string): Promise<any> => {
+const fileReader: FuncStringToPromiseString = (filePath: string) => {
   return new Promise((resolve, reject) => {
-    return fs.readFile(path.resolve(file), 'utf8', (err, data) => {
+    return fs.readFile(path.resolve(filePath), 'utf8', (err, data) => {
       if (err) {
         return reject(err);
       }
@@ -11,20 +12,5 @@ const readPromise = (file: string): Promise<any> => {
     });
   });
 };
-
-
-const fileReader = async (file: string): Promise<string | null> => {
-  const pathToFile = file;
-  let result: string | null;
-
-  try {
-    result = await readPromise(pathToFile);
-  } catch (error) {
-    result = null;
-  }
-
-  return result;
-};
-
 
 export default fileReader;
