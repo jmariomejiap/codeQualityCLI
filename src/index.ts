@@ -1,20 +1,17 @@
 import * as rp from 'request-promise';
 import gitInfoReader from '../src/util/gitInfoReader';
 import fileReader from '../src/util/fileReader';
-import { index as T } from './util/types/index';
+import { index as T } from './util/types/indexTypes';
 
 
 const index = async (): Promise<T.Result> => {
-  const uri: string = process.env.CODE_QUALITY_SERVER_URI || 'http://localhost:8000/api/v1/commit';
-  const token: string  = process.env.CODE_QUALITY_TOKEN;
-  const location: string = process.env.CQ_JSON_LOCATION || './coverage/coverage-summary.json';
 
-  const gitData = await gitInfoReader();
-  const commitHash: string = gitData.sha;
-  const branch: string = process.env.GITBRANCH || gitData.branch;
-  const author: string = process.env.GITAUTHOR || gitData.author;
-
-
+  let envVars: EnvVariables;
+  try {
+    envVars = getEnvVariblesFunc();
+  } catch (error) {
+    console.log(error.message);
+  }
   const commitJson: string = await fileReader(location);
 
   if (!token || !commitJson) {

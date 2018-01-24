@@ -1,9 +1,11 @@
-import { GitInfo } from '../util/types/index';
+import { GitInfo, takeStringReturnStringFunc } from '../util/types/indexTypes';
 
-const gitReader = async (): Promise<any> => {
+const simpleGit = require('simple-git')();
+const gitReader: takeStringReturnStringFunc = (stringValue) => {
   return new Promise((resolve) => {
-    require('simple-git')()
+    simpleGit
       .log((err, log) => {
+        // simpleGit.branch...
         const { hash, message, author_name } = log.latest;
 
         const branch = message.slice(message.indexOf('origin/') + 7, message.length - 1);
