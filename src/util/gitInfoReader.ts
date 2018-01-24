@@ -1,22 +1,21 @@
-import * as getRepoInfo from 'git-repo-info';
-import { GitInfo } from './indexTypes';
+import { GitInfo, takeStringReturnStringFunc } from '../util/types/indexTypes';
 
-export interface GitReaderFun {
-  (): GitInfo;
-}
+const gitReader: takeStringReturnStringFunc = (stringValue) => {
+  return new Promise((resolve) => {
+    require('simple-git')()
+      .log((err, log) => {
+        const { hash, message, author_name } = log.latest;
 
-const gitReader: GitReaderFun = () => {
-  const info = getRepoInfo();
+        const branch = message.slice(message.indexOf('origin/') + 7, message.length - 1);
 
-  const gitInfo: GitInfo = {
-    branch: info.branch,
-    sha: info.sha,
-    abbreviatedSha: info.abbreviatedSha,
-    author: info.author,
-  };
-  console.log(gitInfo);
-  console.log(info);
-  return gitInfo;
+        const gitInfo: GitInfo = {
+          branch,
+          sha: hash,
+          author: author_name,
+        };
+        return resolve(gitInfo);
+      });
+  });
 };
 
 export default gitReader;

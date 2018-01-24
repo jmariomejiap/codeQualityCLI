@@ -1,68 +1,12 @@
 import babelPolyfill from 'babel-polyfill'; // tslint:disable-line no-unused-variable
 import ava from 'ava';
-import sendCommitToApi from '../src/index';
-import * as mongoose from 'mongoose';
+import index from '../src/index';
 import gitInfoReader from '../src/util/gitInfoReader';
 import fileReader from '../src/util/fileReader';
-
-// schemas to delete documents created during testing
-const Schema = mongoose.Schema;
-
-const projectCommits = new Schema({
-  projectId: { type: String, require: true },
-  branch: { type: String, require: true },
-  commitDate: { type: Date, require: true },
-  testCoveragePorcentage: { type: Object, require: true },
-  author: { type: String, require: true },
-  gitCommitHash: { type: String, require: true },
-});
-
-const ProjectCommits = mongoose.model('ProjectCommits', projectCommits); // tslint:disable-line
-
-const branches = new Schema({
-  projectId: { type: String, require: true },
-  name: { type: String, require: true },
-});
-
-const Branches = mongoose.model('Branches', branches); // tslint:disable-line
-
-
-// connection to database mongoose;
-let database;
-
-
-ava.before(async () => {
-  mongoose.Promise = global.Promise;
-
-  // connect to db
-  database = mongoose.connect('mongodb://localhost:27017/code-quality', {
-    useMongoClient: true,
-  });
-});
-
-
-ava.after('after', async (t) => {
-  database.close();
-});
 
 
 ava.serial('true should be true', (t) => {
   t.is(true, true);
-});
-
-
-ava('should retrieve git information', async (t) => {
-  const git = gitInfoReader();
-
-  // t.is() values depend on local user
-  t.truthy(git.branch);
-});
-
-
-ava('should fail if path to file doesnt exist', async (t) => {
-  const fileFound = await fileReader('./ccXtoken.json');
-
-  t.is(fileFound, null);
 });
 
 
@@ -74,35 +18,51 @@ ava('should return a file if path is right', async (t) => {
 });
 
 
-ava('should fail if commit sent has bad token', async (t) => {
-  process.env.TOKEN = '824ceaeXXXX0-e80c-11e7-affc-43f976dbdae1';
-  process.env.GITAUTHOR = 'dummyUserTest testemail@email.com';
-  process.env.GITBRANCH =  'dummyTestBranch';
-  const res = await sendCommitToApi();
+ava('should return null if file doesnt exist', async (t) => {
+  const fileFound = await fileReader('./ccXtoken.json');
+
+  t.is(fileFound, null);
+});
+
+
+ava('should retrieve git information', async (t) => {
+  const git = await gitInfoReader();
+
+  // t.is() values depend on local user
+  t.truthy(git.branch);
+  t.truthy(git.author);
+  t.truthy(git.sha);
+});
+
+
+ava('should fail if No token assigned ', async (t) => {
+  const res = await index();
 
   t.is(res.result, 'error');
-  delete process.env.TOKEN;
-  delete process.env.GITAUTHOR;
-  delete process.env.GITBRANCH;
+  t.is(res.error, 'CLI is missing needed arguments');
+});
 
-  await ProjectCommits.remove({ author: 'dummyUserTest testemail@email.com' });
-  await Branches.remove({ name: 'dummyTestBranch' });
+ava('should fail if no JSON coverage found', async (t) => {
+  process.env.CODE_QUALITY_TOKEN = '824ceaeXXXX0-e80c-11e7-affc-43f976dbdae1';
+  process.env.CQ_JSON_LOCATION = './coverage/Bad-coverage-summary.json';
+
+  const res = await index();
+
+  t.is(res.result, 'error');
+  t.is(res.error, 'CLI is missing needed arguments');
+
+  delete process.env.CODE_QUALITY_TOKEN;
+  delete process.env.CQ_JSON_LOCATION;
 });
 
 
-ava('should succesfully send a commit', async (t) => {
-  process.env.TOKEN = '824ceae0-e80c-11e7-affc-43f976dbdae1';
-  process.env.GITAUTHOR = 'dummyUserTest testemail@email.com';
-  process.env.GITBRANCH =  'dummyTestBranch';
-  const res = await sendCommitToApi();
+ava('should send Commit', async (t) => {
+  process.env.CODE_QUALITY_TOKEN = '824ceaeXXXX0-e80c-11e7-affc-43f976dbdae1';
 
-  t.is(res.result, 'ok');
-  delete process.env.TOKEN;
-  delete process.env.GITAUTHOR;
-  delete process.env.GITBRANCH;
+  const res = await index();
 
-  await ProjectCommits.remove({ author: 'dummyUserTest testemail@email.com' });
-  await Branches.remove({ name: 'dummyTestBranch' });
+  t.is(res.result, 'error');
+
+  delete process.env.CODE_QUALITY_TOKEN;
 });
-
 

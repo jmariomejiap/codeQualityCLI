@@ -1,21 +1,24 @@
 import * as rp from 'request-promise';
 import gitInfoReader from '../src/util/gitInfoReader';
 import fileReader from '../src/util/fileReader';
-import { IndexTypesDefinition as T } from './util/indexTypes';
+import { index as T } from './util/types/indexTypes';
 
-const sendCommitToApi = async () => {
-  const uri: string = process.env.URI || 'http://localhost:8000/api/v1/commit';
-  const token: string  = process.env.TOKEN;
-  const location: string = process.env.LOCATION || './coverage/coverage-summary.json';
 
-  const gitData = gitInfoReader();
-  const commitHash: string = gitData.abbreviatedSha;
-  const branch: string = process.env.GITBRANCH || gitData.branch;
-  const author: string = process.env.GITAUTHOR || gitData.author;
+const index = async (): Promise<T.Result> => {
 
+  let envVars: EnvVariables;
+  try {
+    envVars = getEnvVariblesFunc();
+  } catch (error) {
+    console.log(error.message);
+  }
   const commitJson: string = await fileReader(location);
 
-  const options: T.Options = {
+  if (!token || !commitJson) {
+    return { result: 'error', error: 'CLI is missing needed arguments' };
+  }
+
+  const payload: T.Options = {
     uri,
     method: 'POST',
     body: <T.Body> {
@@ -30,14 +33,17 @@ const sendCommitToApi = async () => {
 
   let result: T.Result;
   try {
-    result = await rp(options);
+    result = await rp(payload);
   } catch (err) {
-    return { result: 'error', error: err.error };
+    /* istanbul ignore next */
+    return { result: 'error', error: 'server_denied' };
   }
-
+  /* istanbul ignore next */
   return { result: result.result };
+
 };
 
-sendCommitToApi();
+index();
 
-export default sendCommitToApi;
+
+export default index;

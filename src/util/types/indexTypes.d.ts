@@ -1,6 +1,6 @@
 
-export namespace IndexTypesDefinition {
-  
+export namespace index {
+
   export interface Body {
     branch: string;
     author: string;
@@ -18,22 +18,27 @@ export namespace IndexTypesDefinition {
 
   export interface Result {
     result: string;
-    error?: ObjectOfStrings
-  }
-
-  export interface ObjectOfStrings {
-    [key: string]: string;
+    error?: string;
   }
 }
 
 export interface GitInfo {
   branch: string;
   sha: string;
-  abbreviatedSha: string;
   author: string;
 }
 
+export interface takeStringReturnStringFunc {
+  (str: string): Promise<string>;
+}
 
+export interface EnvVariables {
+  serverUrl: string;
+  token: string;
+}
 
+export interface GetEnvVariblesFunc {
+  (): EnvVariables;
+}
 
 
