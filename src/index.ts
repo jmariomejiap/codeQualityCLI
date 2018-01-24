@@ -1,7 +1,7 @@
 import * as rp from 'request-promise';
 import gitInfoReader from '../src/util/gitInfoReader';
 import fileReader from '../src/util/fileReader';
-import { index as T } from './util/types/indexTypes';
+import { index as T } from './util/types/index';
 
 
 const index = async (): Promise<T.Result> => {

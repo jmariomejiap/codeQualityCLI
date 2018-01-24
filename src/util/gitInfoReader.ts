@@ -1,4 +1,4 @@
-import { GitInfo } from '../util/types/indexTypes';
+import { GitInfo } from '../util/types/index';
 
 const gitReader = async (): Promise<any> => {
   return new Promise((resolve) => {
