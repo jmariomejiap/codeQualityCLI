@@ -1,38 +1,58 @@
-import { Log } from '../types/indexTypes';
+import { gitInfoReader as T } from '../types/indexTypes';
 const simpleGit = require('simple-git')();
 
-
-const gitReader = () => {
-  const log = new Promise((resolve) => {
+// helper function
+const getAuthorAndHash: T.GetAuthorAndHash = () => {
+  return new Promise((resolve, reject) => {
     simpleGit
       .log((err, log) => {
         if (err) {
-          throw new Error('Error getting Git Logs');
+          return reject('Log promise rejected');
         }
-
-        const { hash, author_name } = log.latest;
-
-        const gitInfo: Log = {
-          sha: hash,
-          author: author_name,
+        const logData: T.LogData = {
+          hash: log.latest.hash,
+          author: log.latest.author_name,
         };
 
-        return resolve(gitInfo);
+        return resolve(logData);
       });
   });
+};
 
-  const branch = new Promise((resolve) => {
+// helper function
+const getBranch: T.FuncReturnsPromiseString = () => {
+  return new Promise((resolve, reject) => {
     simpleGit
       .branch((err, branchData) => {
         if (err) {
-          throw new Error('Error getting Git Branch information');
+          return reject('Branch promise rejected');
         }
         const branch: string = branchData.current;
         return resolve(branch);
       });
   });
-
-  return [log, branch];
 };
 
-export default gitReader;
+
+// export function
+const getGitData: T.GetGitData = async () => {
+  let branch: string;
+  let gitData;
+
+  try {
+    branch = await getBranch();
+    gitData = await getAuthorAndHash();
+  } catch (error) {
+    return error;
+  }
+
+  const result: T.Result = {
+    branch,
+    author: gitData.author,
+    hash: gitData.hash,
+  };
+
+  return result;
+};
+
+export default getGitData;

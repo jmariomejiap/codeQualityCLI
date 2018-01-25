@@ -1,30 +1,28 @@
 import * as rp from 'request-promise';
 import gitInfoReader from '../src/util/gitInfoReader';
-import envVarioablesValidator from './util/envVarioablesValidator';
-import { index as T, EnvVariables } from './types/indexTypes';
+import envVariablesValidator from './util/envVariablesValidator';
+import { index as T, envVariables as E } from './types/indexTypes';
 
 
-const index = async (): Promise<T.Result> => {
-  let envVars: EnvVariables;
+const index = async (): Promise<T.IndexResult> => {
+  let envVars: E.EnvVariables;
   try {
-    envVars = await envVarioablesValidator();
+    envVars = await envVariablesValidator();
   } catch (error) {
-    console.log(error); // tslint:disable-line
+    console.log(`Error: ${error} `); // tslint:disable-line
     return;
   }
 
 
   let gitData;
   try {
-    gitData = await Promise.all(gitInfoReader());
+    gitData = gitInfoReader();
   } catch (error) {
-    console.log(error); // tslint:disable-line
+    console.log(`Error getting Git Data: ${error}`); // tslint:disable-line
+    return;
   }
 
-
-  const { sha, author } = gitData[0];
-  const branch = gitData[1];
-
+  const { sha, author, branch } = gitData;
 
   const payload: T.Options = {
     uri: envVars.serverUrl,
@@ -40,7 +38,7 @@ const index = async (): Promise<T.Result> => {
   };
 
 
-  let result: T.Result;
+  let result: T.IndexResult;
   try {
     result = await rp(payload);
   } catch (err) {

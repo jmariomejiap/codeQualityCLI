@@ -3,6 +3,7 @@ import ava from 'ava';
 // import index from '../src/index';
 import gitInfoReader from '../src/util/gitInfoReader';
 import fileReader from '../src/util/fileReader';
+// import envVariablesValidator from '../src/util/envVariablesValidator';
 
 
 ava.serial('true should be true', (t) => {
@@ -27,7 +28,7 @@ ava('should return a file if path is right', async (t) => {
 });
 
 
-ava('should return null if file doesnt exist', async (t) => {
+ava('should fail if file doesnt exist', async (t) => {
   let fileFound: string;
   let errorMessage: string;
 
@@ -42,23 +43,37 @@ ava('should return null if file doesnt exist', async (t) => {
 });
 
 
-ava('should retrieve git information', async (t) => {
+ava('function should retrieve git information', async (t) => {
   let gitData;
   let errorMessage: string;
 
   try {
-    gitData = await Promise.all(gitInfoReader());
+    gitData = await gitInfoReader();
   } catch (error) {
+    console.log('catching error in test'); // tslint:disable-line
     errorMessage = 'error';
   }
+  // console.log('gitData in test = ', gitData);
 
   // t.is() values depend on local user
-  t.truthy(gitData[0].author);
-  t.truthy(gitData[0].sha);
-  t.truthy(gitData[1]); // current branch
+  t.truthy(gitData.author);
+  t.truthy(gitData.hash);
+  t.truthy(gitData.branch);
   t.is(errorMessage, undefined);
 });
 
+
+ava.skip('envVariables validation should fail if URL not give', async (t) => {
+  process.env.CODE_QUALITY_SERVER_URL = 'http://localhost:8000/api/v1/commit';
+
+  // const envVariables = await index();
+
+  // t.is(res.result, 'error');
+  // t.is(res.error, 'CLI is missing needed arguments');
+
+  delete process.env.CODE_QUALITY_TOKEN;
+  delete process.env.CQ_JSON_LOCATION;
+});
 
 /*
 ava.skip('should fail if No token assigned ', async (t) => {

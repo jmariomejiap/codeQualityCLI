@@ -1,8 +1,8 @@
-import { GetEnvVariblesFunc, EnvVariables } from '../types/indexTypes';
+import { envVariables as T } from '../types/indexTypes';
 import fileReader from '../util/fileReader';
 
 
-const getEnvVariblesFunc: GetEnvVariblesFunc = async () => {
+const getEnvVariblesFunc: T.GetEnvVariblesFunc = async () => {
   const coverageLocation: string = process.env.CODE_QUALITY_JSON_COVERAGE
     || '../../coverage/coverage-summary.json';
 
@@ -23,7 +23,7 @@ const getEnvVariblesFunc: GetEnvVariblesFunc = async () => {
   }
 
   // required variables to enable ClI
-  const envVars: EnvVariables = {
+  const envVars: T.EnvVariables = {
     coverageJson,
     serverUrl: process.env.CODE_QUALITY_SERVER_URL,
     token: process.env.CODE_QUALITY_TOKEN,
