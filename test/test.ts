@@ -1,6 +1,6 @@
 import babelPolyfill from 'babel-polyfill'; // tslint:disable-line no-unused-variable
 import ava from 'ava';
-// import index from '../src/index';
+import index from '../src/index';
 import gitInfoReader from '../src/util/gitInfoReader';
 import fileReader from '../src/util/fileReader';
 import envVariablesValidator from '../src/util/envVariablesValidator';
@@ -123,10 +123,10 @@ ava('envVariables validation should fail if JSON-COVERAGE not found (wrongPath)'
 });
 
 
-ava.skip('envVariables validation SUCCESS if variables are set properly', async (t) => {
+ava('envVariables validation SUCCESS if variables are set properly', async (t) => {
   process.env.CODE_QUALITY_SERVER_URL = 'https://codeQuality.com/api/v1/commit';
   process.env.CODE_QUALITY_TOKEN = 'sillyToken';
-  process.env.CODE_QUALITY_JSON_COVERAGE = './coverage/coverage-summary.json';
+  process.env.CODE_QUALITY_JSON_COVERAGE = './test/coverage-summary.json';
 
   let errorFound: undefined ;
   let envVariables: E.EnvVariables;
@@ -151,6 +151,50 @@ ava.skip('envVariables validation SUCCESS if variables are set properly', async 
 });
 
 
+
+ava('should send Commit', async (t) => {
+  process.env.CODE_QUALITY_SERVER_URL = 'https://codeQuality.com/api/v1/commit';
+  process.env.CODE_QUALITY_TOKEN = 'sillyToken';
+  process.env.CODE_QUALITY_JSON_COVERAGE = './test/coverage-summary.json';
+
+  let res;
+  let errorMessage;
+  try {
+    res = await index();
+  } catch (error) {
+    errorMessage = error
+  }
+  
+
+  t.truthy(res.result);
+  t.is(errorMessage, undefined)
+
+  delete process.env.CODE_QUALITY_SERVER_URL;
+  delete process.env.CODE_QUALITY_TOKEN;
+  delete process.env.CODE_QUALITY_JSON_COVERAGE;
+});
+
+
+ava('index should catch error if envVariables are not set properly', async (t) => {
+  process.env.CODE_QUALITY_TOKEN = 'sillyToken';
+  process.env.CODE_QUALITY_JSON_COVERAGE = './test/coverage-summary.json';
+
+  let res;
+  let errorMessage;
+  try {
+    res = await index();
+  } catch (error) {
+    errorMessage = error
+  }
+  
+
+  // index will console.log error but returns void;
+  t.is(errorMessage, undefined);
+  t.is(res, undefined);
+
+  delete process.env.CODE_QUALITY_TOKEN;
+  delete process.env.CODE_QUALITY_JSON_COVERAGE;
+});
 
 /*
 ava.skip('should fail if No token assigned ', async (t) => {

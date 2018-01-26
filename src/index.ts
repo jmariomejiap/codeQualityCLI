@@ -9,7 +9,7 @@ const index = async (): Promise<T.IndexResult> => {
   try {
     envVars = await envVariablesValidator();
   } catch (error) {
-    console.log(`Error: ${error} `); // tslint:disable-line
+    console.log(`Error: ${error.message} `); // tslint:disable-line
     return;
   }
 
@@ -18,8 +18,10 @@ const index = async (): Promise<T.IndexResult> => {
   try {
     gitData = gitInfoReader();
   } catch (error) {
+    /* istanbul ignore next */
     console.log(`Error getting Git Data: ${error}`); // tslint:disable-line
-    return;
+    /* istanbul ignore next */
+    return
   }
 
   const { hash, author, branch } = gitData;

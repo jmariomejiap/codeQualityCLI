@@ -12,6 +12,7 @@ const getEnvVariblesFunc: T.GetEnvVariblesFunc = async () => {
   }
 
   // find code coverage json file
+  /* istanbul ignore next */
   const coverageLocation: string = process.env.CODE_QUALITY_JSON_COVERAGE
     || '../../coverage/coverage-summary.json';
 
