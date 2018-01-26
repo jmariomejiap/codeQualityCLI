@@ -6,6 +6,7 @@ const getAuthorAndHash: T.GetAuthorAndHash = () => {
   return new Promise((resolve, reject) => {
     simpleGit
       .log((err, log) => {
+        /* istanbul ignore if */
         if (err) {
           return reject('Log promise rejected');
         }
@@ -24,6 +25,7 @@ const getBranch: T.FuncReturnsPromiseString = () => {
   return new Promise((resolve, reject) => {
     simpleGit
       .branch((err, branchData) => {
+        /* istanbul ignore if */
         if (err) {
           return reject('Branch promise rejected');
         }
@@ -43,6 +45,7 @@ const getGitData: T.GetGitData = async () => {
     branch = await getBranch();
     gitData = await getAuthorAndHash();
   } catch (error) {
+    /* istanbul ignore next */
     return error;
   }
 
