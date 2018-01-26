@@ -3,9 +3,6 @@ import fileReader from '../util/fileReader';
 
 
 const getEnvVariblesFunc: T.GetEnvVariblesFunc = async () => {
-  const coverageLocation: string = process.env.CODE_QUALITY_JSON_COVERAGE
-    || '../../coverage/coverage-summary.json';
-
   if (!process.env.CODE_QUALITY_SERVER_URL) {
     throw new Error('configuration error, CODE_QUALITY_SERVER_URL is missing');
   }
@@ -15,6 +12,9 @@ const getEnvVariblesFunc: T.GetEnvVariblesFunc = async () => {
   }
 
   // find code coverage json file
+  const coverageLocation: string = process.env.CODE_QUALITY_JSON_COVERAGE
+    || '../../coverage/coverage-summary.json';
+
   let coverageJson: string;
   try {
     coverageJson = await fileReader(coverageLocation);
