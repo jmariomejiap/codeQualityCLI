@@ -21,7 +21,7 @@ const index = async (): Promise<T.IndexResult> => {
     /* istanbul ignore next */
     console.log(`Error getting Git Data: ${error}`); // tslint:disable-line
     /* istanbul ignore next */
-    return
+    return;
   }
 
   const { hash, author, branch } = gitData;

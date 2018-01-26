@@ -162,12 +162,11 @@ ava('should send Commit', async (t) => {
   try {
     res = await index();
   } catch (error) {
-    errorMessage = error
+    errorMessage = error;
   }
-  
 
   t.truthy(res.result);
-  t.is(errorMessage, undefined)
+  t.is(errorMessage, undefined);
 
   delete process.env.CODE_QUALITY_SERVER_URL;
   delete process.env.CODE_QUALITY_TOKEN;
@@ -184,9 +183,8 @@ ava('index should catch error if envVariables are not set properly', async (t) =
   try {
     res = await index();
   } catch (error) {
-    errorMessage = error
+    errorMessage = error;
   }
-  
 
   // index will console.log error but returns void;
   t.is(errorMessage, undefined);
@@ -195,36 +193,3 @@ ava('index should catch error if envVariables are not set properly', async (t) =
   delete process.env.CODE_QUALITY_TOKEN;
   delete process.env.CODE_QUALITY_JSON_COVERAGE;
 });
-
-/*
-ava.skip('should fail if No token assigned ', async (t) => {
-  const res = await index();
-
-  t.is(res.result, 'error');
-  t.is(res.error, 'CLI is missing needed arguments');
-});
-
-ava.skip('should fail if no JSON coverage found', async (t) => {
-  process.env.CODE_QUALITY_TOKEN = '824ceaeXXXX0-e80c-11e7-affc-43f976dbdae1';
-  process.env.CQ_JSON_LOCATION = './coverage/Bad-coverage-summary.json';
-
-  const res = await index();
-
-  t.is(res.result, 'error');
-  t.is(res.error, 'CLI is missing needed arguments');
-
-  delete process.env.CODE_QUALITY_TOKEN;
-  delete process.env.CQ_JSON_LOCATION;
-});
-
-
-ava.skip('should send Commit', async (t) => {
-  process.env.CODE_QUALITY_TOKEN = '824ceaeXXXX0-e80c-11e7-affc-43f976dbdae1';
-
-  const res = await index();
-
-  t.is(res.result, 'error');
-
-  delete process.env.CODE_QUALITY_TOKEN;
-});
-*/
