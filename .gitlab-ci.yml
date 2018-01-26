@@ -24,7 +24,8 @@ test_backend:
   script:
    - npm install --silent
    # - node node_modules/.bin/ava --serial -v
-   - npm test
+   # - npm test
+   - npm run cover
 
 test_lint:
   script:
