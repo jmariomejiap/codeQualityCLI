@@ -123,7 +123,7 @@ ava('envVariables validation should fail if JSON-COVERAGE not found (wrongPath)'
 });
 
 
-ava('envVariables validation SUCCESS if variables are set properly', async (t) => {
+ava.skip('envVariables validation SUCCESS if variables are set properly', async (t) => {
   process.env.CODE_QUALITY_SERVER_URL = 'https://codeQuality.com/api/v1/commit';
   process.env.CODE_QUALITY_TOKEN = 'sillyToken';
   process.env.CODE_QUALITY_JSON_COVERAGE = './coverage/coverage-summary.json';
