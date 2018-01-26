@@ -1,12 +1,12 @@
+
 // types used in index file
 export namespace index {
-
   export interface Body {
     branch: string;
     author: string;
     commitHash: string;
     token: string;
-    commitJson: any;
+    commitJson: ObjectKeysStrinsAndValuesAny;
   }
 
   export interface Options {
@@ -21,6 +21,8 @@ export namespace index {
     error?: string;
   }
 }
+
+
 
 // types used in gitInfoReader
 export namespace gitInfoReader {
@@ -46,8 +48,9 @@ export namespace gitInfoReader {
   export interface FuncReturnsPromiseString {
     (): Promise<string>;
   }
-
 }
+
+
 
 // types used in envVariablesValidator
 export namespace envVariables {
@@ -62,7 +65,19 @@ export namespace envVariables {
   }
 }
 
+
+
 // Generic function, used in fileReader
 export interface FuncStringToPromiseString {
   (str: string): Promise<string>;
+}
+
+// Generic object, use for tests
+export interface ObjectStringsKeysAndValues {
+  [key:string]: string; 
+}
+
+// Super Generic object
+export interface ObjectKeysStrinsAndValuesAny {
+  [key:string]: any;
 }

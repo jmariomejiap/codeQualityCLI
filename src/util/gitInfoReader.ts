@@ -1,5 +1,6 @@
-import { gitInfoReader as T } from '../types/indexTypes';
 const simpleGit = require('simple-git')();
+import { gitInfoReader as T } from '../types/indexTypes';
+
 
 // helper function
 const getAuthorAndHash: T.GetAuthorAndHash = () => {

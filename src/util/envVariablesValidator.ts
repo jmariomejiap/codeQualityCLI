@@ -19,7 +19,7 @@ const getEnvVariblesFunc: T.GetEnvVariblesFunc = async () => {
   try {
     coverageJson = await fileReader(coverageLocation);
   } catch (error) {
-    throw new Error('configuration error, CODE_COVERAGE is missing');
+    throw new Error('configuration error, CODE_COVERAGE JSON is missing');
   }
 
   // required variables to enable ClI

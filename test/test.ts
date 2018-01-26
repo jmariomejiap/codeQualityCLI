@@ -3,7 +3,8 @@ import ava from 'ava';
 // import index from '../src/index';
 import gitInfoReader from '../src/util/gitInfoReader';
 import fileReader from '../src/util/fileReader';
-// import envVariablesValidator from '../src/util/envVariablesValidator';
+import envVariablesValidator from '../src/util/envVariablesValidator';
+import { envVariables as E, ObjectStringsKeysAndValues } from '../src/types/indexTypes';
 
 
 ava.serial('true should be true', (t) => {
@@ -63,17 +64,93 @@ ava('function should retrieve git information', async (t) => {
 });
 
 
-ava.skip('envVariables validation should fail if URL not give', async (t) => {
-  process.env.CODE_QUALITY_SERVER_URL = 'http://localhost:8000/api/v1/commit';
+ava('envVariables validation should fail if URL not set', async (t) => {
+  process.env.CODE_QUALITY_TOKEN = 'sillyToken';
 
-  // const envVariables = await index();
+  let errorFound: ObjectStringsKeysAndValues;
+  let envVariables;
+  try {
+    envVariables = await envVariablesValidator();
+  } catch (error) {
+    errorFound = error;
+  }
 
-  // t.is(res.result, 'error');
-  // t.is(res.error, 'CLI is missing needed arguments');
+  t.is(errorFound.message, 'configuration error, CODE_QUALITY_SERVER_URL is missing');
+  t.is(envVariables, undefined);
 
   delete process.env.CODE_QUALITY_TOKEN;
-  delete process.env.CQ_JSON_LOCATION;
 });
+
+
+ava('envVariables validation should fail if TOKEN not set', async (t) => {
+  process.env.CODE_QUALITY_SERVER_URL = 'https://codeQuality.com/api/v1/commit';
+
+  let errorFound: ObjectStringsKeysAndValues;
+  let envVariables;
+  try {
+    envVariables = await envVariablesValidator();
+  } catch (error) {
+    errorFound = error;
+  }
+
+  t.is(errorFound.message, 'configuration error, CODE_QUALITY_TOKEN is missing');
+  t.is(envVariables, undefined);
+
+  delete process.env.CODE_QUALITY_SERVER_URL;
+});
+
+
+ava('envVariables validation should fail if JSON-COVERAGE not found (wrongPath)', async (t) => {
+  process.env.CODE_QUALITY_SERVER_URL = 'https://codeQuality.com/api/v1/commit';
+  process.env.CODE_QUALITY_TOKEN = 'sillyToken';
+  process.env.CODE_QUALITY_JSON_COVERAGE = '../coverage/coverage-summary.json';
+
+  let errorFound: ObjectStringsKeysAndValues;
+  let envVariables;
+  try {
+    envVariables = await envVariablesValidator();
+  } catch (error) {
+    errorFound = error;
+  }
+
+  t.is(errorFound.message, 'configuration error, CODE_COVERAGE JSON is missing');
+  t.is(envVariables, undefined);
+
+  delete process.env.CODE_QUALITY_SERVER_URL;
+  delete process.env.CODE_QUALITY_TOKEN;
+  delete process.env.CODE_QUALITY_JSON_COVERAGE;
+
+});
+
+
+ava('envVariables validation SUCCESS if variables are set properly', async (t) => {
+  process.env.CODE_QUALITY_SERVER_URL = 'https://codeQuality.com/api/v1/commit';
+  process.env.CODE_QUALITY_TOKEN = 'sillyToken';
+  process.env.CODE_QUALITY_JSON_COVERAGE = './coverage/coverage-summary.json';
+
+  let errorFound: undefined ;
+  let envVariables: E.EnvVariables;
+  try {
+    envVariables = await envVariablesValidator();
+  } catch (error) {
+    errorFound = error;
+  }
+
+  const coverage = JSON.parse(envVariables.coverageJson);
+  const { lines, statements, functions, branches } = coverage.total;
+
+  t.truthy(lines);
+  t.truthy(statements);
+  t.truthy(functions);
+  t.truthy(branches);
+  t.is(errorFound, undefined);
+
+  delete process.env.CODE_QUALITY_SERVER_URL;
+  delete process.env.CODE_QUALITY_TOKEN;
+  delete process.env.CODE_QUALITY_JSON_COVERAGE;
+});
+
+
 
 /*
 ava.skip('should fail if No token assigned ', async (t) => {
