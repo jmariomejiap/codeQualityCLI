@@ -16,8 +16,8 @@ const getAuthorAndHash: T.GetAuthorAndHash = () => {
           hash: log.latest.hash,
           author: log.latest.author_name,
           message: log.latest.message,
+          date: log.latest.date,
         };
-
         return resolve(logData);
       });
   });
@@ -57,6 +57,7 @@ const getGitData: T.GetGitData = async () => {
     author: gitData.author,
     hash: gitData.hash,
     message: gitData.message,
+    date: gitData.date,
   };
 
   return result;

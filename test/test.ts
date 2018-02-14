@@ -60,6 +60,8 @@ ava('function should retrieve git information', async (t) => {
   t.truthy(gitData.author);
   t.truthy(gitData.hash);
   t.truthy(gitData.branch);
+  t.truthy(gitData.message);
+  t.truthy(gitData.date);
   t.is(errorMessage, undefined);
 });
 

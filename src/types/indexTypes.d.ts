@@ -8,6 +8,7 @@ export namespace index {
     message: string;
     token: string;
     commitJson: ObjectKeysStrinsAndValuesAny;
+    date: string;
   }
 
   export interface Options {
@@ -31,6 +32,7 @@ export namespace gitInfoReader {
     hash: string;
     author: string;
     message: string;
+    date: string;
   }
   
   export interface Result {
@@ -38,6 +40,7 @@ export namespace gitInfoReader {
     hash: string;
     message: string;
     branch: string;
+    date: string;
   }
   
   export interface GetAuthorAndHash {

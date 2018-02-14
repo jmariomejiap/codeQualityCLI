@@ -24,7 +24,7 @@ const index = async (): Promise<T.IndexResult> => {
     return;
   }
 
-  const { hash, author, branch, message } = gitData;
+  const { hash, author, branch, message, date } = gitData;
 
   const payload: T.Options = {
     uri: envVars.serverUrl,
@@ -33,6 +33,7 @@ const index = async (): Promise<T.IndexResult> => {
       branch,
       author,
       message,
+      date,
       commitHash: hash,
       token: envVars.token,
       commitJson: JSON.parse(envVars.coverageJson),
