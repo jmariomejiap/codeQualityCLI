@@ -5,6 +5,7 @@ export namespace index {
     branch: string;
     author: string;
     commitHash: string;
+    message: string;
     token: string;
     commitJson: ObjectKeysStrinsAndValuesAny;
   }
@@ -29,12 +30,14 @@ export namespace gitInfoReader {
   export interface LogData {
     hash: string;
     author: string;
+    message: string;
   }
   
   export interface Result {
-    author: string,
-    hash: string,
-    branch: string,
+    author: string;
+    hash: string;
+    message: string;
+    branch: string;
   }
   
   export interface GetAuthorAndHash {

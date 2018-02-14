@@ -16,7 +16,7 @@ const index = async (): Promise<T.IndexResult> => {
 
   let gitData;
   try {
-    gitData = gitInfoReader();
+    gitData = await gitInfoReader();
   } catch (error) {
     /* istanbul ignore next */
     console.log(`Error getting Git Data: ${error}`); // tslint:disable-line
@@ -24,7 +24,7 @@ const index = async (): Promise<T.IndexResult> => {
     return;
   }
 
-  const { hash, author, branch } = gitData;
+  const { hash, author, branch, message } = gitData;
 
   const payload: T.Options = {
     uri: envVars.serverUrl,
@@ -33,6 +33,7 @@ const index = async (): Promise<T.IndexResult> => {
       branch,
       author,
       commitHash: hash,
+      message,
       token: envVars.token,
       commitJson: JSON.parse(envVars.coverageJson),
     },

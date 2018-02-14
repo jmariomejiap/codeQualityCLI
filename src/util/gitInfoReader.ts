@@ -11,9 +11,11 @@ const getAuthorAndHash: T.GetAuthorAndHash = () => {
         if (err) {
           return reject('Log promise rejected');
         }
+
         const logData: T.LogData = {
           hash: log.latest.hash,
           author: log.latest.author_name,
+          message: log.latest.message,
         };
 
         return resolve(logData);
@@ -54,6 +56,7 @@ const getGitData: T.GetGitData = async () => {
     branch,
     author: gitData.author,
     hash: gitData.hash,
+    message: gitData.message,
   };
 
   return result;
