@@ -32,8 +32,8 @@ const index = async (): Promise<T.IndexResult> => {
     body: <T.Body> {
       branch,
       author,
-      commitHash: hash,
       message,
+      commitHash: hash,
       token: envVars.token,
       commitJson: JSON.parse(envVars.coverageJson),
     },
