@@ -1,5 +1,5 @@
 const simpleGit = require('simple-git')();
-import { gitInfoReader as T } from '../types/indexTypes';
+import { gitInfoReader as T } from '../types/appTypes';
 
 
 // helper function

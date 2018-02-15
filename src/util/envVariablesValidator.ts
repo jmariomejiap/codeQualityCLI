@@ -1,4 +1,4 @@
-import { envVariables as T } from '../types/indexTypes';
+import { envVariables as T } from '../types/appTypes';
 import fileReader from '../util/fileReader';
 
 

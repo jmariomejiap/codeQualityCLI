@@ -1,6 +1,6 @@
 import * as fs from 'fs';
 import * as path from 'path';
-import { FuncStringToPromiseString } from '../types/indexTypes';
+import { FuncStringToPromiseString } from '../types/appTypes';
 
 const fileReader: FuncStringToPromiseString = (filePath: string) => {
   return new Promise((resolve, reject) => {

@@ -1,10 +1,10 @@
 import babelPolyfill from 'babel-polyfill'; // tslint:disable-line no-unused-variable
 import ava from 'ava';
-import index from '../src/index';
+import app from '../src/app';
 import gitInfoReader from '../src/util/gitInfoReader';
 import fileReader from '../src/util/fileReader';
 import envVariablesValidator from '../src/util/envVariablesValidator';
-import { envVariables as E, ObjectStringsKeysAndValues } from '../src/types/indexTypes';
+import { envVariables as E, ObjectStringsKeysAndValues } from '../src/types/appTypes';
 
 
 ava.serial('true should be true', (t) => {
@@ -162,7 +162,7 @@ ava('should send Commit', async (t) => {
   let res;
   let errorMessage;
   try {
-    res = await index();
+    res = await app();
   } catch (error) {
     errorMessage = error;
   }
@@ -183,7 +183,7 @@ ava('index should catch error if envVariables are not set properly', async (t) =
   let res;
   let errorMessage;
   try {
-    res = await index();
+    res = await app();
   } catch (error) {
     errorMessage = error;
   }

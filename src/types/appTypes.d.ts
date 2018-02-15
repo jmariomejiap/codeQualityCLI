@@ -1,6 +1,6 @@
 
 // types used in index file
-export namespace index {
+export namespace App {
   export interface Body {
     branch: string;
     author: string;
@@ -18,7 +18,7 @@ export namespace index {
     body: Body;
   }
 
-  export interface IndexResult {
+  export interface AppResult {
     result: string;
     error?: string;
   }
