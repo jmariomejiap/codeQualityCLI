@@ -32,6 +32,7 @@ const getBranch: T.FuncReturnsPromiseString = () => {
         if (err) {
           return reject('Branch promise rejected');
         }
+        console.log('branchData = ', branchData)
         const branch: string = branchData.current;
         return resolve(branch);
       });
