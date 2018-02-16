@@ -18,6 +18,8 @@ const getEnvVariblesFunc: T.GetEnvVariblesFunc = async () => {
 
   console.log('path for coverage = ', coverageLocation); // tslint:disable-line
 
+
+
   let coverageJson: string;
   try {
     coverageJson = await fileReader(coverageLocation);
