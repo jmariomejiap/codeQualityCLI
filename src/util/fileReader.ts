@@ -9,6 +9,7 @@ const fileReader: FuncStringToPromiseString = (filePath: string) => {
       if (err) {
         return reject(err);
       }
+      console.log('found file...', data);
       resolve(data);
     });
   });
