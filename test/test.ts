@@ -115,7 +115,7 @@ ava('envVariables validation should fail if JSON-COVERAGE not found (wrongPath)'
     errorFound = error;
   }
 
-  t.is(errorFound.message, 'configuration error, CODE_COVERAGE JSON is missing');
+  t.is(errorFound.message, 'configuration error, CODE_COVERAGE_JSON is missing');
   t.is(envVariables, undefined);
 
   delete process.env.CODE_QUALITY_SERVER_URL;
