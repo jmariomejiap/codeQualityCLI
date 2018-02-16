@@ -16,10 +16,6 @@ const getEnvVariblesFunc: T.GetEnvVariblesFunc = async () => {
   const coverageLocation: string = process.env.CODE_QUALITY_JSON_COVERAGE
     || '../../coverage/coverage-summary.json';
 
-  console.log('path for coverage = ', coverageLocation); // tslint:disable-line
-
-
-
   let coverageJson: string;
   try {
     coverageJson = await fileReader(coverageLocation);
