@@ -44,15 +44,12 @@ const app = async (): Promise<T.AppResult> => {
 
   let result: T.AppResult;
   try {
-    console.log('this is the payload = ', payload);
     result = await rp(payload);
   } catch (err) {
     /* istanbul ignore next */
-    console.log('error = ', err);
     return { result: 'error', error: 'server_denied' };
   }
   /* istanbul ignore next */
-  console.log('result = ', result);
   return { result: result.result };
 
 };
