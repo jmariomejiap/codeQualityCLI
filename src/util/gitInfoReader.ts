@@ -31,21 +31,22 @@ const getBranch: T.FuncReturnsPromiseString = () => {
         if (err) {
           return reject('Branch promise rejected');
         }
-        
+
         // cli behaves differently when run on CI vs. local.
         /* istanbul ignore if */
         if (branchData.detached) {
-          const commitName = branchData.current;          
-          for (let branchObj in branchData.branches) {
-            for (let prop in branchData.branches[branchObj]) {
-              if (branchData.branches[branchObj][prop] === commitName && branchData.branches[branchObj].name !== commitName) {
+          const commitName = branchData.current;
+          for (const branchObj in branchData.branches) {
+            for (const prop in branchData.branches[branchObj]) {
+              if (branchData.branches[branchObj][prop] === commitName &&
+                branchData.branches[branchObj].name !== commitName) {
                 const rawBranch: string = branchData.branches[branchObj].name;
                 const branch: string = rawBranch.slice(rawBranch.lastIndexOf('/') + 1);
                 return resolve(branch);
               }
             }
           }
-        };
+        }
 
         const branch: string = branchData.current;
         return resolve(branch);
