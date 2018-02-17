@@ -33,6 +33,7 @@ const getBranch: T.FuncReturnsPromiseString = () => {
         }
 
         // cli behaves differently when run on CI vs. local.
+        // branchData will be detached in CI.
         /* istanbul ignore if */
         if (branchData.detached) {
           const commitName = branchData.current;
@@ -48,6 +49,8 @@ const getBranch: T.FuncReturnsPromiseString = () => {
           }
         }
 
+        // hit when run locally.
+        /* istanbul ignore if */
         const branch: string = branchData.current;
         return resolve(branch);
       });
