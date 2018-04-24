@@ -1,3 +1,2 @@
-
-const msg: string = 'Code Quality CLI';
-console.log(msg);
+import app from './app';
+app();
