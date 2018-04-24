@@ -38,7 +38,7 @@ ___
 * create a **script** inside your **package.json**
 
 ```
-    "codeQualityCLI": "cd ./node_modules/code-quality-cli && npm install && npm run start"
+    "codeQualityCLI": "cd ./node_modules/code-quality-cli && npm install && npm run start:dev"
     
 ```
 * inside `.gitlab-ci.yml` file execute the script
