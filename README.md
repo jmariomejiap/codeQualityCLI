@@ -60,7 +60,7 @@ test_backend:
     - CODE_QUALITY_JSON_COVERAGE = path to coverage data. (ex. ../../coverage/coverage-summary.json)
 ```
 
-* The output would be a `Post` request to the URL passed in your enviroment variables with a payload that looks like this.
+* The output would be a `Post` request to the URL passed in your environment variables with a payload that looks like this.
 
 ```
 {
