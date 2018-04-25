@@ -1,6 +1,6 @@
 # Code Quality CLI
 
-Code Quality CLI is a tool for CI/CD, designed to be run automatically whenever code is deployed. It reports Git information, and Code Coverage Results to CodeQuality Server for visualization.
+Code Quality CLI is a tool for CI/CD, designed to be run automatically whenever code is deployed. It reports Git information, and Code Coverage Results to [`Code Quality Server`](https://github.com/jmariomejiap/codeQuality) for visualization.
 
 It was built using Typescript.
 
