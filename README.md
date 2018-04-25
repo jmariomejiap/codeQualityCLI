@@ -52,7 +52,7 @@ test_backend:
 ```
 
 
-* You must provide **3** environment variables to your CI/CD configuration.(settings/secret variables). You will get the token one a project is created at [`Code Quality`](https://github.com/jmariomejiap/codeQuality) 
+* You must provide **3** environment variables to your CI/CD configuration.(settings/secret variables). Tokens are generated upon the creating of a project at [`Code Quality`](https://github.com/jmariomejiap/codeQuality) 
 
 ```
     - CODE_QUALITY_SERVER_URL = where you will receive the output
