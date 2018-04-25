@@ -52,7 +52,7 @@ test_backend:
 ```
 
 
-* You must provide **3** environment variables to your CI/CD configuration.(settings/secret variables). Tokens are generated upon the creating of a project at [`Code Quality`](https://github.com/jmariomejiap/codeQuality) 
+* You must provide **3** environment variables to your CI/CD configuration.(settings/secret variables). Tokens are generated after creating a project at [`Code Quality`](https://github.com/jmariomejiap/codeQuality) 
 
 ```
     - CODE_QUALITY_SERVER_URL = where you will receive the output
@@ -88,7 +88,7 @@ Everytime continuous integration runs on your project you can expect to see its 
 
 ___
 ## Contributing
-I welcome contributions! Please open an issues if you have any feature ideas or find any bugs. I also accept pull requests with open arms. I will go over the issues when I have time. :)
+I welcome contributions! Please open an issue if you have any feature ideas or find any bugs. I also accept pull requests with open arms. I will go over the issues when I have time. :)
 
 
 
