@@ -1,4 +1,6 @@
 # Code Quality CLI
+[![Build Status](https://travis-ci.org/jmariomejiap/codeQualityCLI.svg?branch=master)](https://travis-ci.org/jmariomejiap/codeQualityCLI)
+
 
 Code Quality CLI is a tool for CI/CD, designed to be run automatically whenever code is deployed. It reports Git information, and Code Coverage Results to [`Code Quality`](https://github.com/jmariomejiap/codeQuality) for visualization.
 
