@@ -1,6 +1,6 @@
 # Code Quality CLI
 
-Code Quality CLI is a tool for CI/CD, designed to be run automatically whenever code is deployed. It reports Git information, and Code Coverage Results to CodeQuality Server for visualization.
+Code Quality CLI is a tool for CI/CD, designed to be run automatically whenever code is deployed. It reports Git information, and Code Coverage Results to [`Code Quality`](https://github.com/jmariomejiap/codeQuality) for visualization.
 
 It was built using Typescript.
 
@@ -14,7 +14,7 @@ It was built using Typescript.
 
 ## Getting Started
 
-##### Installation
+#### Installation
 
 
 
@@ -32,10 +32,11 @@ or
 $ yarn install
 ```
 
-##### Usage
+#### Configuration
+
 Example with GitLab Continuous Integration & Deployment
 ___
-* create a **script** inside your **package.json**
+* create a **script** inside your project **package.json**
 
 ```
     "codeQualityCLI": "cd ./node_modules/code-quality-cli && npm install && npm run start:dev"
@@ -51,14 +52,15 @@ test_backend:
 ```
 
 
-* You must provide **2** environment variables to your CI/CD configurarion.(settings/secret variables)
+* You must provide **3** environment variables to your CI/CD configuration.(settings/secret variables). Tokens are generated after creating a project at [`Code Quality`](https://github.com/jmariomejiap/codeQuality) 
 
 ```
     - CODE_QUALITY_SERVER_URL = where you will receive the output
     - CODE_QUALITY_TOKEN = a token for an specific project. where output will be visualized
+    - CODE_QUALITY_JSON_COVERAGE = path to coverage data. (ex. ../../coverage/coverage-summary.json)
 ```
 
-* The output would be a Post request to the URL passed in your enviroment variables with a payload that looks like this.
+* The output would be a `Post` request to the URL passed in your environment variables with a payload that looks like this.
 
 ```
 {
@@ -79,14 +81,14 @@ test_backend:
 	"date" : "2018-01-08T21:20:50.388Z"
 }
 
-
 ```
 
+Everytime continuous integration runs on your project you can expect to see its result in the Code Quality Dashboard.
 
 
 ___
 ## Contributing
-I welcome contributions! Please open an issues if you have any feature ideas or find any bugs. I also accept pull requests with open arms. I will go over the issues when I have time. :)
+I welcome contributions! Please open an issue if you have any feature ideas or find any bugs. I also accept pull requests with open arms. I will go over the issues when I have time. :)
 
 
 
