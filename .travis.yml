@@ -4,3 +4,5 @@ install:
   - npm install
 script:
   - npm run cover
+
+  after_success: 'npm run coveralls'

@@ -12,7 +12,8 @@
     "watch-ts": "tsc -w",
     "prepublish": "npm build",
     "cover": "nyc --reporter=html --reporter=text --reporter=json-summary npm run test",
-    "lint": "tslint -c tslint.json -p tsconfig.json"
+    "lint": "tslint -c tslint.json -p tsconfig.json",
+    "coveralls": "cat ./coverage/lcov.info | ./node_modules/.bin/coveralls"
   },
   "repository": {
     "type": "git",
@@ -40,6 +41,7 @@
     "babel-preset-es2015": "6.24.1",
     "babel-preset-es2016": "6.24.1",
     "babel-preset-stage-0": "6.24.1",
+    "coveralls": "^3.0.1",
     "nyc": "11.3.0",
     "supertest": "3.0.0",
     "ts-loader": "2.3.4",
