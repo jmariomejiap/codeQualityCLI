@@ -13,7 +13,7 @@
     "prepublish": "npm build",
     "cover": "nyc --reporter=html --reporter=text --reporter=json-summary --reporter=text-lcov npm run test",
     "lint": "tslint -c tslint.json -p tsconfig.json",
-    "coveralls": "cat ./coverage/lcov.info | ./node_modules/.bin/coveralls"
+    "coveralls": "nyc npm cover && nyc report --reporter=text-lcov | coveralls"
   },
   "repository": {
     "type": "git",
