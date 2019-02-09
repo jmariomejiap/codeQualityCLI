@@ -11,6 +11,7 @@ const getEnvVariblesFunc: T.GetEnvVariblesFunc = async () => {
     throw new Error('configuration error, CODE_QUALITY_TOKEN is missing');
   }
 
+  console.log('+++ process...', process.env.CODE_QUALITY_JSON_COVERAGE)
   // find code coverage json file
   /* istanbul ignore next */
   const coverageLocation: string = process.env.CODE_QUALITY_JSON_COVERAGE
