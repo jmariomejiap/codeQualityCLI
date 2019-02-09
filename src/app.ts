@@ -47,7 +47,7 @@ const app = async (): Promise<T.AppResult> => {
     return { result: "error", error: "server_denied" };
   }
   /* istanbul ignore next */
-  console.log("report sent !", result.result);
+  console.log("+++ report  has been sent !", result.result);
   return { result: result.result };
 };
 
