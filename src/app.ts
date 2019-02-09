@@ -1,8 +1,7 @@
-import * as rp from 'request-promise';
-import gitInfoReader from '../src/util/gitInfoReader';
-import envVariablesValidator from './util/envVariablesValidator';
-import { App as T, envVariables as E } from './types/appTypes';
-
+import * as rp from "request-promise";
+import gitInfoReader from "../src/util/gitInfoReader";
+import envVariablesValidator from "./util/envVariablesValidator";
+import { App as T, envVariables as E } from "./types/appTypes";
 
 const app = async (): Promise<T.AppResult> => {
   let envVars: E.EnvVariables;
@@ -12,7 +11,6 @@ const app = async (): Promise<T.AppResult> => {
     console.log(`Error: ${error.message} `); // tslint:disable-line
     return;
   }
-
 
   let gitData;
   try {
@@ -28,33 +26,29 @@ const app = async (): Promise<T.AppResult> => {
 
   const payload: T.Options = {
     uri: envVars.serverUrl,
-    method: 'POST',
-    body: <T.Body> {
+    method: "POST",
+    body: <T.Body>{
       branch,
       author,
       message,
       date,
       commitHash: hash,
       token: envVars.token,
-      commitJson: JSON.parse(envVars.coverageJson),
+      commitJson: JSON.parse(envVars.coverageJson)
     },
-    json: true,
+    json: true
   };
-
 
   let result: T.AppResult;
   try {
     result = await rp(payload);
   } catch (err) {
     /* istanbul ignore next */
-    return { result: 'error', error: 'server_denied' };
+    return { result: "error", error: "server_denied" };
   }
   /* istanbul ignore next */
+  console.log("report sent !", result.result);
   return { result: result.result };
-
 };
-
-
-
 
 export default app;
