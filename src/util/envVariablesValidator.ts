@@ -11,16 +11,22 @@ const getEnvVariblesFunc: T.GetEnvVariblesFunc = async () => {
   }
 
   // find code coverage json file
-  /* istanbul ignore next */
-  const coverageLocation: string =
-    process.env.CODE_QUALITY_JSON_COVERAGE ||
-    "../../coverage/coverage-summary.json";
+  // the expected path is "../../coverage/coverage-summary.json";
+  const coverageLocation: string = process.env.CODE_QUALITY_JSON_COVERAGE;
 
   let coverageJson: string;
   try {
     coverageJson = await fileReader(coverageLocation);
   } catch (error) {
-    throw new Error("configuration error, CODE_COVERAGE_JSON is missing");
+    if (!process.env.CODE_QUALITY_JSON_COVERAGE) {
+      throw new Error(
+        "configuration error, CODE_QUALITY_JSON_COVERAGE env variable is missing"
+      );
+    }
+
+    throw new Error(
+      "configuration error, coverage output couldn't be found, check your configuration."
+    );
   }
 
   // required variables to enable ClI
