@@ -11,7 +11,7 @@
     "build": "tsc",
     "watch-ts": "tsc -w",
     "prepublish": "npm build",
-    "cover": "nyc --reporter=html --reporter=text --reporter=json-summary npm run test",
+    "cover": "nyc --reporter=html --reporter=text --reporter=json-summary --reporter=text-lcov npm run test",
     "lint": "tslint -c tslint.json -p tsconfig.json"
   },
   "repository": {
