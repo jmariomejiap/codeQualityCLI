@@ -1,58 +1,57 @@
-import babelPolyfill from 'babel-polyfill'; // tslint:disable-line no-unused-variable
-import ava from 'ava';
-import app from '../src/app';
-import gitInfoReader from '../src/util/gitInfoReader';
-import fileReader from '../src/util/fileReader';
-import envVariablesValidator from '../src/util/envVariablesValidator';
-import { envVariables as E, ObjectStringsKeysAndValues } from '../src/types/appTypes';
+import babelPolyfill from "babel-polyfill"; // tslint:disable-line no-unused-variable
+import ava from "ava";
+import app from "../src/app";
+import gitInfoReader from "../src/util/gitInfoReader";
+import fileReader from "../src/util/fileReader";
+import envVariablesValidator from "../src/util/envVariablesValidator";
+import {
+  envVariables as E,
+  ObjectStringsKeysAndValues
+} from "../src/types/appTypes";
 
-
-ava.serial('true should be true', (t) => {
+ava.serial("true should be true", t => {
   t.is(true, true);
 });
 
-
-ava('should return a file if path is right', async (t) => {
+ava("should return a file if path is right", async t => {
   let fileFound: string;
   let errorMessage: string;
 
   try {
-    fileFound = await fileReader('./package.json');
+    fileFound = await fileReader("./package.json");
   } catch (error) {
-    errorMessage = 'error';
+    errorMessage = "error";
   }
 
   const file = JSON.parse(fileFound);
 
-  t.is(file.name, 'code-quality-cli');
+  t.is(file.name, "code-quality-cli");
   t.is(errorMessage, undefined);
 });
 
-
-ava('should fail if file doesnt exist', async (t) => {
+ava("should fail if file doesnt exist", async t => {
   let fileFound: string;
   let errorMessage: string;
 
   try {
-    fileFound = await fileReader('./ccXtoken.json');
+    fileFound = await fileReader("./ccXtoken.json");
   } catch (error) {
-    errorMessage = 'error';
+    errorMessage = "error";
   }
 
   t.is(fileFound, undefined);
-  t.is(errorMessage, 'error');
+  t.is(errorMessage, "error");
 });
 
-
-ava('function should retrieve git information', async (t) => {
+ava("function should retrieve git information", async t => {
   let gitData;
   let errorMessage: string;
 
   try {
     gitData = await gitInfoReader();
   } catch (error) {
-    console.log('catching error in test'); // tslint:disable-line
-    errorMessage = 'error';
+    console.log("catching error in test"); // tslint:disable-line
+    errorMessage = "error";
   }
   // console.log('gitData in test = ', gitData);
 
@@ -65,27 +64,8 @@ ava('function should retrieve git information', async (t) => {
   t.is(errorMessage, undefined);
 });
 
-
-ava('envVariables validation should fail if URL not set', async (t) => {
-  process.env.CODE_QUALITY_TOKEN = 'sillyToken';
-
-  let errorFound: ObjectStringsKeysAndValues;
-  let envVariables;
-  try {
-    envVariables = await envVariablesValidator();
-  } catch (error) {
-    errorFound = error;
-  }
-
-  t.is(errorFound.message, 'configuration error, CODE_QUALITY_SERVER_URL is missing');
-  t.is(envVariables, undefined);
-
-  delete process.env.CODE_QUALITY_TOKEN;
-});
-
-
-ava('envVariables validation should fail if TOKEN not set', async (t) => {
-  process.env.CODE_QUALITY_SERVER_URL = 'https://codeQuality.com/api/v1/commit';
+ava("envVariables validation should fail if URL not set", async t => {
+  process.env.CODE_QUALITY_TOKEN = "sillyToken";
 
   let errorFound: ObjectStringsKeysAndValues;
   let envVariables;
@@ -95,17 +75,17 @@ ava('envVariables validation should fail if TOKEN not set', async (t) => {
     errorFound = error;
   }
 
-  t.is(errorFound.message, 'configuration error, CODE_QUALITY_TOKEN is missing');
+  t.is(
+    errorFound.message,
+    "configuration error, CODE_QUALITY_SERVER_URL is missing"
+  );
   t.is(envVariables, undefined);
 
-  delete process.env.CODE_QUALITY_SERVER_URL;
+  delete process.env.CODE_QUALITY_TOKEN;
 });
 
-
-ava('envVariables validation should fail if JSON-COVERAGE not found (wrongPath)', async (t) => {
-  process.env.CODE_QUALITY_SERVER_URL = 'https://codeQuality.com/api/v1/commit';
-  process.env.CODE_QUALITY_TOKEN = 'sillyToken';
-  process.env.CODE_QUALITY_JSON_COVERAGE = '../coverage/coverage-summary.json';
+ava("envVariables validation should fail if TOKEN not set", async t => {
+  process.env.CODE_QUALITY_SERVER_URL = "https://codeQuality.com/api/v1/commit";
 
   let errorFound: ObjectStringsKeysAndValues;
   let envVariables;
@@ -115,49 +95,106 @@ ava('envVariables validation should fail if JSON-COVERAGE not found (wrongPath)'
     errorFound = error;
   }
 
-  t.is(errorFound.message, 'configuration error, CODE_COVERAGE_JSON is missing');
+  t.is(
+    errorFound.message,
+    "configuration error, CODE_QUALITY_TOKEN is missing"
+  );
   t.is(envVariables, undefined);
 
   delete process.env.CODE_QUALITY_SERVER_URL;
-  delete process.env.CODE_QUALITY_TOKEN;
-  delete process.env.CODE_QUALITY_JSON_COVERAGE;
-
 });
 
+ava(
+  "envVariables validation should fail if coverage output not found (wrongPath)",
+  async t => {
+    process.env.CODE_QUALITY_SERVER_URL =
+      "https://codeQuality.com/api/v1/commit";
+    process.env.CODE_QUALITY_TOKEN = "sillyToken";
+    process.env.CODE_QUALITY_JSON_COVERAGE =
+      "../coverage/coverage-summary.json";
 
-ava('envVariables validation SUCCESS if variables are set properly', async (t) => {
-  process.env.CODE_QUALITY_SERVER_URL = 'https://codeQuality.com/api/v1/commit';
-  process.env.CODE_QUALITY_TOKEN = 'sillyToken';
-  process.env.CODE_QUALITY_JSON_COVERAGE = './test/coverage-summary.json';
+    let errorFound: ObjectStringsKeysAndValues;
+    let envVariables;
+    try {
+      envVariables = await envVariablesValidator();
+    } catch (error) {
+      errorFound = error;
+    }
 
-  let errorFound: undefined ;
-  let envVariables: E.EnvVariables;
-  try {
-    envVariables = await envVariablesValidator();
-  } catch (error) {
-    errorFound = error;
+    t.is(
+      errorFound.message,
+      "configuration error, coverage output couldn't be found, check your configuration."
+    );
+    t.is(envVariables, undefined);
+
+    delete process.env.CODE_QUALITY_SERVER_URL;
+    delete process.env.CODE_QUALITY_TOKEN;
+    delete process.env.CODE_QUALITY_JSON_COVERAGE;
   }
+);
 
-  const coverage = JSON.parse(envVariables.coverageJson);
-  const { lines, statements, functions, branches } = coverage.total;
+ava(
+  "envVariables validation should fail if CODE_QUALITY_JSON_COVERAGE path is missing",
+  async t => {
+    process.env.CODE_QUALITY_SERVER_URL =
+      "https://codeQuality.com/api/v1/commit";
+    process.env.CODE_QUALITY_TOKEN = "sillyToken";
 
-  t.truthy(lines);
-  t.truthy(statements);
-  t.truthy(functions);
-  t.truthy(branches);
-  t.is(errorFound, undefined);
+    let errorFound: ObjectStringsKeysAndValues;
+    let envVariables;
+    try {
+      envVariables = await envVariablesValidator();
+    } catch (error) {
+      errorFound = error;
+    }
 
-  delete process.env.CODE_QUALITY_SERVER_URL;
-  delete process.env.CODE_QUALITY_TOKEN;
-  delete process.env.CODE_QUALITY_JSON_COVERAGE;
-});
+    t.is(
+      errorFound.message,
+      "configuration error, CODE_QUALITY_JSON_COVERAGE env variable is missing"
+    );
+    t.is(envVariables, undefined);
 
+    delete process.env.CODE_QUALITY_SERVER_URL;
+    delete process.env.CODE_QUALITY_TOKEN;
+    delete process.env.CODE_QUALITY_JSON_COVERAGE;
+  }
+);
 
+ava(
+  "envVariables validation SUCCESS if variables are set properly",
+  async t => {
+    process.env.CODE_QUALITY_SERVER_URL =
+      "https://codeQuality.com/api/v1/commit";
+    process.env.CODE_QUALITY_TOKEN = "sillyToken";
+    process.env.CODE_QUALITY_JSON_COVERAGE = "./test/coverage-summary.json";
 
-ava('should send Commit', async (t) => {
-  process.env.CODE_QUALITY_SERVER_URL = 'https://codeQuality.com/api/v1/commit';
-  process.env.CODE_QUALITY_TOKEN = 'sillyToken';
-  process.env.CODE_QUALITY_JSON_COVERAGE = './test/coverage-summary.json';
+    let errorFound: undefined;
+    let envVariables: E.EnvVariables;
+    try {
+      envVariables = await envVariablesValidator();
+    } catch (error) {
+      errorFound = error;
+    }
+
+    const coverage = JSON.parse(envVariables.coverageJson);
+    const { lines, statements, functions, branches } = coverage.total;
+
+    t.truthy(lines);
+    t.truthy(statements);
+    t.truthy(functions);
+    t.truthy(branches);
+    t.is(errorFound, undefined);
+
+    delete process.env.CODE_QUALITY_SERVER_URL;
+    delete process.env.CODE_QUALITY_TOKEN;
+    delete process.env.CODE_QUALITY_JSON_COVERAGE;
+  }
+);
+
+ava("should send Commit", async t => {
+  process.env.CODE_QUALITY_SERVER_URL = "https://codeQuality.com/api/v1/commit";
+  process.env.CODE_QUALITY_TOKEN = "sillyToken";
+  process.env.CODE_QUALITY_JSON_COVERAGE = "./test/coverage-summary.json";
 
   let res;
   let errorMessage;
@@ -175,23 +212,25 @@ ava('should send Commit', async (t) => {
   delete process.env.CODE_QUALITY_JSON_COVERAGE;
 });
 
+ava(
+  "index should catch error if envVariables are not set properly",
+  async t => {
+    process.env.CODE_QUALITY_TOKEN = "sillyToken";
+    process.env.CODE_QUALITY_JSON_COVERAGE = "./test/coverage-summary.json";
 
-ava('index should catch error if envVariables are not set properly', async (t) => {
-  process.env.CODE_QUALITY_TOKEN = 'sillyToken';
-  process.env.CODE_QUALITY_JSON_COVERAGE = './test/coverage-summary.json';
+    let res;
+    let errorMessage;
+    try {
+      res = await app();
+    } catch (error) {
+      errorMessage = error;
+    }
 
-  let res;
-  let errorMessage;
-  try {
-    res = await app();
-  } catch (error) {
-    errorMessage = error;
+    // index will console.log error but returns void;
+    t.is(errorMessage, undefined);
+    t.is(res, undefined);
+
+    delete process.env.CODE_QUALITY_TOKEN;
+    delete process.env.CODE_QUALITY_JSON_COVERAGE;
   }
-
-  // index will console.log error but returns void;
-  t.is(errorMessage, undefined);
-  t.is(res, undefined);
-
-  delete process.env.CODE_QUALITY_TOKEN;
-  delete process.env.CODE_QUALITY_JSON_COVERAGE;
-});
+);
